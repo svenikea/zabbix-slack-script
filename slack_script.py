@@ -1,6 +1,6 @@
 #! /usr/bin/python
 
-import logging, os, sys, re, json, socket, subprocess
+import logging, sys, re, json, socket
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 from datetime import datetime
@@ -23,22 +23,18 @@ def get_ip_address():
     s.connect(("8.8.8.8", 80))
     return s.getsockname()[0]
 
-# This part of the code I don't know how to do grep output like from the shellscript
-# So I have to use the os module to execute shell command, what a bummer :(
-def shell_command(argv1, argv2):
-    return subprocess.getoutput(f"echo {message} | grep {argv1} | cut -d '*' -f{argv2}")
-
-def find_all(argv1):
-    return str(re.findall(argv1, message)).strip('[]').replace('\'', '')
+def get_info(argv1):
+    return message.replace(",", "*").split("*")[argv1]
     
-server=shell_command("Host", 2)
-trigger_id=shell_command("triggerid", 12)
-event_id=shell_command("eventid", 8)
-op_data=shell_command("opdata", 6)
-group=shell_command("group", 14)
-status=find_all("PROBLEM|RESOLVED|OK")
+server=get_info(0)
+server=get_info(0)
+severity=get_info(1)
+op_data=get_info(2)
+event_id=get_info(3)
+status=get_info(4)
+trigger_id=get_info(5)
+group=get_info(6)
 formatted_time=datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-severity=find_all("High|Warning|Disaster|Average|Information")
 colors=["#97AAB3", "#7499FF", "#FFC859", "#FFA059", "#E97659", "#E45959", "#009900"]
 link=f"http://{get_ip_address()}/zabbix/tr_events.php?triggerid={trigger_id}&eventid={event_id}"
 
