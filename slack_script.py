@@ -27,7 +27,6 @@ def get_info(argv1):
     return message.replace(",", "*").split("*")[argv1]
     
 server=get_info(0)
-server=get_info(0)
 severity=get_info(1)
 op_data=get_info(2)
 event_id=get_info(3)
