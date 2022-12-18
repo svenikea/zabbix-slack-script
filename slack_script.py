@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 
 import logging, sys, re, json, socket
 from slack_sdk import WebClient
@@ -7,15 +7,9 @@ from datetime import datetime
 
 # Slack Alert information
 ## Slack user/channel ID with different recipient here!
-unit1_recipients=[]
-unit2_recipients=[]
-unit3_recipients=[]
-unit4_recipients=[]
-all_unit="<!channel>"
-channel_id=sys.argv[1]
-subject=sys.argv[2]
-message=sys.argv[3]
-response_channel = []
+unit1_recipients, unit2_recipients, unit3_recipients, unit4_recipients, all_unit = [], [], [], [], "<!channel>"
+## Message template
+channel_id, subject, message, response_channel = sys.argv[1], sys.argv[2], sys.argv[3], []
 
 # Function Declaration
 def get_ip_address():
@@ -26,7 +20,6 @@ def get_ip_address():
 def get_info(argv1):
     return message.replace(",", "*").split("*")[argv1]
     
-server=get_info(0)
 server=get_info(0)
 severity=get_info(1)
 op_data=get_info(2)
