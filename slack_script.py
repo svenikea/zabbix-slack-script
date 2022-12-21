@@ -1,8 +1,8 @@
-#! /usr/bin/python3
+#! /usr/bin/python
 
 import logging, sys, re, json, socket
-from slack_sdk import WebClient             # <= Need to install slack_sdk
-from slack_sdk.errors import SlackApiError  # <= Need to install slack_sdk
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
 from datetime import datetime
 
 # Slack Alert information
@@ -16,7 +16,7 @@ slack_token = "TOKEN" # <= Put the token here
 def get_ip_address():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
-    return s.getsockname()[0]   # <= This return the host IP address that execute this script
+    return s.getsockname()[0]
 
 def get_info(argv1):
     return message.replace(",", "*").split("*")[argv1] # <= Replace any separator from (,) to (*) or choose what ever separator you want
@@ -107,7 +107,7 @@ else:
     selected_color = colors[6]
 
 #Define alert recipient
-if group == "matched group1": # <= Remeber to change  the group of your team
+if group == "matched group1":
     if severity != "Disaster":
         channel_id = response_channel[0]
         sendto = " ".join(unit1_recipients) # <= convert a list of unit recipients to string
