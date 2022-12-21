@@ -54,6 +54,9 @@ You can either enter the default subject and message then click ```Add``` or jus
 
 ```
 {HOST.NAME}*{TRIGGER.SEVERITY}*{ITEM.VALUE1}*{EVENT.ID}*{TRIGGER.STATUS}*{TRIGGER.ID}*{TRIGGER.HOSTGROUP.NAME}
+
+# Example
+EC2,Warning,30,7872822,PROBLEM,876688,group4
 ```
 
 > This section of the script is a function that will extract the required value and assign it to its corresponding variable. For example, ```argv1``` is for keyword value and these keywords are separated by a special character that you designated in this case an asterisk "*"
