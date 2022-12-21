@@ -9,7 +9,7 @@ from datetime import datetime
 ## Slack user/channel ID with different recipient here!
 unit1_recipients, unit2_recipients, unit3_recipients, unit4_recipients, all_unit = [], [], [], [], "<!channel>"
 ## Message template
-channel_id, subject, message, response_channel = sys.argv[1], sys.argv[2], sys.argv[3], []
+channel_id, subject, message, sendto, response_channel = sys.argv[1], sys.argv[2], sys.argv[3], None, []
 
 # Function Declaration
 def get_ip_address():
