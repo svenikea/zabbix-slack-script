@@ -1,8 +1,8 @@
 #! /usr/bin/python3
 
 import logging, sys, re, json, socket
-from slack_sdk import WebClient
-from slack_sdk.errors import SlackApiError
+from slack_sdk import WebClient             # <= Need to install slack_sdk
+from slack_sdk.errors import SlackApiError  # <= Need to install slack_sdk
 from datetime import datetime
 
 # Slack Alert information
@@ -15,11 +15,13 @@ channel_id, subject, message, sendto, response_channel = sys.argv[1], sys.argv[2
 def get_ip_address():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
-    return s.getsockname()[0]
+    return s.getsockname()[0]   # <= This return the host IP address that execute this script
 
 def get_info(argv1):
-    return message.replace(",", "*").split("*")[argv1]
-    
+    return message.replace(",", "*").split("*")[argv1] # <= Replace any separator from (,) to (*) or choose what ever separator you want
+
+# This is the order of the message 0,1,2,3,4,5,6 
+# Rember you can change the order the the message just make sure the below variable matched the corresponding order you have changed
 server=get_info(0)
 severity=get_info(1)
 op_data=get_info(2)
@@ -29,7 +31,7 @@ trigger_id=get_info(5)
 group=get_info(6)
 formatted_time=datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 colors=["#97AAB3", "#7499FF", "#FFC859", "#FFA059", "#E97659", "#E45959", "#009900"]
-link=f"http://{get_ip_address()}/zabbix/tr_events.php?triggerid={trigger_id}&eventid={event_id}"
+link=f"http://{get_ip_address()}/zabbix/tr_events.php?triggerid={trigger_id}&eventid={event_id}" #<= In live production http should be change to https
 
 # Set alet message type
 if status == "PROBLEM":
@@ -47,10 +49,10 @@ else:
     selected_color=colors[6]
 
 #Define alert recipient
-if group == "matched group1":
+if group == "matched group1": # <= Remeber to change  the group of your team
     if severity != "Disaster":
         channel_id=response_channel[0]
-        sendto=" ".join(unit1_recipients)
+        sendto=" ".join(unit1_recipients) # <= convert a list of unit recipients to string
     else:
         channel_id=response_channel[0]
         sendto=all_unit
@@ -75,8 +77,8 @@ elif group == "matched group4":
     else:
         channel_id=response_channel[3]
         sendto=all_unit
-        
-client = WebClient(token=("TOKEN_HERE"))
+
+client = WebClient(token=("TOKEN_HERE")) # <= Put the token here
 logger = logging.getLogger(__name__)
 attachment_json= [
     {
