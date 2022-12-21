@@ -18,6 +18,18 @@ Slack support dedicated ```chat.postMessage``` for languages such as ```JavaScri
 
 Structure complex data in an easily readable and understandable way within messages. You can learn more about it at their official [document](https://api.slack.com/messaging/composing/layouts)
 
+## Variable Type
+
+|Data       |Usage      |Example|
+|-----------|-----------|--------|
+|`all_unit`   |To mention all user in a channel| `<!channel>`|
+|`unit1_recipients` `unit2_recipients` `unit3_recipients` `unit4_recipients` |A list of users |`["<@U03TGH3MLKN>"], ["<@U03TGH3MLKN>", "<@NBMSVRM1RQX>"]`
+|`sendto` |To mention specific user or a list of users| `None`|
+|`channel_id` |Initial channel ID to send from Zabbix side |`#general`|
+|`subject` |The subject or the title of the alert | Mysql Server is Down |
+|`message` |The body of  the alert | EC2,Warning,30,7872822,PROBLEM,876688,group4 |
+|`response_channel` |The Target channel id of which the script will send to | `#general` |
+
 ## Example
 
 ![screenshot](./images/general_screenshot.png)
