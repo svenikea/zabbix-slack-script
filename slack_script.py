@@ -87,7 +87,7 @@ attachment_json= [
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": f"*<{link}|{subject}>*"
+                    "text": f"*<{link}|{title}>*"
                 }
             },
             {
