@@ -12,6 +12,7 @@ unit2_recipients=[]
 unit3_recipients=[]
 unit4_recipients=[]
 all_unit="<!channel>"
+sendto=""
 channel_id=sys.argv[1]
 subject=sys.argv[2]
 message=sys.argv[3]
