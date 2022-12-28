@@ -7,7 +7,13 @@ from datetime import datetime
 
 # Slack Alert information
 ## Slack user/channel ID with different recipient here!
-unit1_recipients, unit2_recipients, unit3_recipients, unit4_recipients, all_unit = [], [], [], [], "<!channel>"
+recipients = {
+    'unit1'     : [],
+    'unit2'     : [],
+    'unit3'     : [],
+    'unit4'     : [],
+    'all_units' : "<!channel>"
+}
 ## Message template
 channel_id, subject, message, sendto, response_channel = sys.argv[1], sys.argv[2], sys.argv[3], None, []
 slack_token = "TOKEN" # <= Put the token here
@@ -77,7 +83,7 @@ def send_notification(color, link, title, server, severity, op_data, slack_token
 
     except SlackApiError as e:
         logger.error(f"Error posting message: {e}")
-    return print("Sending Successful")
+    #return print("Sending Successful")
 
 # This is the order of the message 0,1,2,3,4,5,6 
 # Rember you can change the order the the message just make sure the below variable matched the corresponding order you have changed
@@ -110,30 +116,33 @@ else:
 if group == "matched group1":
     if severity != "Disaster":
         channel_id = response_channel[0]
-        sendto = " ".join(unit1_recipients) # <= convert a list of unit recipients to string
+        sendto = " ".join(recipients['unit1']) # <= convert a list of unit recipients to string
     else:
         channel_id = response_channel[0]
-        sendto = all_unit
+        sendto = recipients['all_units']
 elif group == "matched group2":
     if severity != "Disaster":
         channel_id = response_channel[1]
-        sendto = " ".join(unit2_recipients)
+        sendto = " ".join(recipients['unit2'])
     else:
         channel_id = response_channel[1]
-        sendto = all_unit
+        sendto = recipients['all_units']
 elif group == "matched group3":
     if severity != "Disaster":
         channel_id = response_channel[2]
-        sendto = " ".join(unit3_recipients)
+        sendto = " ".join(recipients['unit3'])
     else:
         channel_id = response_channel[2]
-        sendto = all_unit
+        sendto = recipients['all_units']
 elif group == "matched group4":
     if severity != "Disaster":
         channel_id = response_channel[3]
-        sendto = " ".join(unit4_recipients)
+        sendto = " ".join(recipients['unit4'])
     else:
         channel_id = response_channel[3]
-        sendto = all_unit
+        sendto = recipients['all_units']
 
 send_notification(selected_color, link, title, server, severity, op_data, slack_token)
+print("Debug")
+print(channel_id)
+print(sendto)
