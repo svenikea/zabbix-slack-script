@@ -15,7 +15,16 @@ recipients = {
     'all_units' : "<!channel>"
 }
 ## Message template
-channel_id, subject, message, sendto, response_channel = sys.argv[1], sys.argv[2], sys.argv[3], None, []
+message_template = {
+    'channel_id'        : sys.argv[1],
+    'subject'           : sys.argv[2],
+    'message'           : sys.argv[3],
+    'sendto'            : None,
+    'response_channel'  : [],
+    'color'             : ["#97AAB3", "#7499FF", "#FFC859", "#FFA059", "#E97659", "#E45959", "#009900"],
+    'match_groups'      : ["matched group1", "matched group2", "matched group3", "matched group4"]
+}
+#channel_id, subject, message, sendto, response_channel = sys.argv[1], sys.argv[2], sys.argv[3], None, []
 slack_token = "TOKEN" # <= Put the token here
 
 # Function Declaration
@@ -25,7 +34,7 @@ def get_ip_address():
     return s.getsockname()[0]
 
 def get_info(argv1):
-    return message.replace(",", "*").split("*")[argv1] # <= Replace any separator from (,) to (*) or choose what ever separator you want
+    return message_template['message'].replace(",", "*").split("*")[argv1] # <= Replace any separator from (,) to (*) or choose what ever separator you want
 
 def send_notification(color, link, title, server, severity, op_data, slack_token ):
     client = WebClient(token=slack_token)
@@ -75,15 +84,14 @@ def send_notification(color, link, title, server, severity, op_data, slack_token
     try:
         # Call the chat.postMessage method using the WebClient
         result = client.chat_postMessage(
-            channel = channel_id, 
-            text = sendto,
+            channel = message_template['channel_id'], 
+            text = message_template['sendto'],
             attachments = attachment_json
         )
         logger.info(result)
 
     except SlackApiError as e:
         logger.error(f"Error posting message: {e}")
-    #return print("Sending Successful")
 
 # This is the order of the message 0,1,2,3,4,5,6 
 # Rember you can change the order the the message just make sure the below variable matched the corresponding order you have changed
@@ -94,55 +102,54 @@ event_id    = get_info(3)
 status      = get_info(4)
 trigger_id  = get_info(5)
 group       = get_info(6)
-colors      = ["#97AAB3", "#7499FF", "#FFC859", "#FFA059", "#E97659", "#E45959", "#009900"]
 link        = f"http://{get_ip_address()}/zabbix/tr_events.php?triggerid={trigger_id}&eventid={event_id}" #<= In live production http should be change to https
 
 # Set alet message type
 if status == "PROBLEM":
-    title = f":red_circle: Problem: {subject}"
+    title = f":red_circle: Problem: {message_template['subject']}"
     if severity == "Warning" or severity == "Average":
-        selected_color = colors[2]
+        selected_color = message_template['color'][2]
     elif severity == "High":
-        selected_color = colors[4]
+        selected_color = message_template['color'][4]
     elif severity == "Disaster":
-        selected_color = colors[5]
+        selected_color = message_template['color'][5]
     elif severity == "Information":
-        selected_color = colors[1]
+        selected_color = message_template['color'][1]
 else:
-    title = f":large_green_circle: Resolved: {subject}"
-    selected_color = colors[6]
+    title = f":large_green_circle: Resolved: {message_template['subject']}"
+    selected_color = message_template['color'][6]
 
 #Define alert recipient
-if group == "matched group1":
+if group == message_template['match_groups'][0]:
     if severity != "Disaster":
-        channel_id = response_channel[0]
-        sendto = " ".join(recipients['unit1']) # <= convert a list of unit recipients to string
+        channel_id = message_template['response_channel'][0]
+        message_template['sendto'] = " ".join(recipients['unit1']) # <= convert a list of unit recipients to string
     else:
-        channel_id = response_channel[0]
-        sendto = recipients['all_units']
-elif group == "matched group2":
+        channel_id = message_template['response_channel'][0]
+        message_template['sendto'] = recipients['all_units']
+elif group ==message_template['match_groups'][1]:
     if severity != "Disaster":
-        channel_id = response_channel[1]
-        sendto = " ".join(recipients['unit2'])
+        channel_id = message_template['response_channel'][1]
+        message_template['sendto'] = " ".join(recipients['unit2'])
     else:
-        channel_id = response_channel[1]
-        sendto = recipients['all_units']
-elif group == "matched group3":
+        channel_id = message_template['response_channel'][1]
+        message_template['sendto'] = recipients['all_units']
+elif group == message_template['match_groups'][2]:
     if severity != "Disaster":
-        channel_id = response_channel[2]
-        sendto = " ".join(recipients['unit3'])
+        channel_id = message_template['response_channel'][2]
+        message_template['sendto'] = " ".join(recipients['unit3'])
     else:
-        channel_id = response_channel[2]
-        sendto = recipients['all_units']
-elif group == "matched group4":
+        channel_id = message_template['response_channel'][2]
+        message_template['sendto'] = recipients['all_units']
+elif group == message_template['match_groups'][3]:
     if severity != "Disaster":
-        channel_id = response_channel[3]
-        sendto = " ".join(recipients['unit4'])
+        channel_id = message_template['response_channel'][3]
+        message_template['sendto'] = " ".join(recipients['unit4'])
     else:
-        channel_id = response_channel[3]
-        sendto = recipients['all_units']
+        channel_id = message_template['response_channel'][3]
+        message_template['sendto'] = recipients['all_units']
 
 send_notification(selected_color, link, title, server, severity, op_data, slack_token)
 print("Debug")
 print(channel_id)
-print(sendto)
+print(message_template['sendto'])
