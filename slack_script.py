@@ -20,7 +20,6 @@ message_template = {
     'subject'           : sys.argv[2],
     'message'           : sys.argv[3],
     'sendto'            : None,
-    'response_channel'  : [],
     'color'             : ["#97AAB3", "#7499FF", "#FFC859", "#FFA059", "#E97659", "#E45959", "#009900"],
     'match_groups'      : ["matched group1", "matched group2", "matched group3", "matched group4"]
 }
@@ -122,34 +121,25 @@ else:
 #Define alert recipient
 if group == message_template['match_groups'][0]:
     if severity != "Disaster":
-        channel_id = message_template['response_channel'][0]
         message_template['sendto'] = " ".join(recipients['unit1']) # <= convert a list of unit recipients to string
     else:
-        channel_id = message_template['response_channel'][0]
         message_template['sendto'] = recipients['all_units']
 elif group ==message_template['match_groups'][1]:
     if severity != "Disaster":
-        channel_id = message_template['response_channel'][1]
         message_template['sendto'] = " ".join(recipients['unit2'])
     else:
-        channel_id = message_template['response_channel'][1]
         message_template['sendto'] = recipients['all_units']
 elif group == message_template['match_groups'][2]:
     if severity != "Disaster":
-        channel_id = message_template['response_channel'][2]
         message_template['sendto'] = " ".join(recipients['unit3'])
     else:
-        channel_id = message_template['response_channel'][2]
         message_template['sendto'] = recipients['all_units']
 elif group == message_template['match_groups'][3]:
     if severity != "Disaster":
-        channel_id = message_template['response_channel'][3]
         message_template['sendto'] = " ".join(recipients['unit4'])
     else:
-        channel_id = message_template['response_channel'][3]
         message_template['sendto'] = recipients['all_units']
 
 send_notification(selected_color, link, title, server, severity, op_data, slack_token)
 print("Debug")
-print(channel_id)
 print(message_template['sendto'])
